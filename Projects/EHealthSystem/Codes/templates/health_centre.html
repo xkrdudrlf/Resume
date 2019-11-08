@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>Health Centres</title>
+	<link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/centre.css')}}">
+</head>
+
+<body>
+
+	<div class="wrapper">
+		<h1><p class = "heading" align="center">MediSoft HealthCare</p></h1>
+		
+		<ul class="nav">
+	        <li class="nav"><a href={{url_for('homepage',user_id=user_id)}}>Home</a></li>
+	        <li class="nav"><a href={{url_for('health_provider',user_id=user_id)}}>Health Providers</a></li>
+		{% if user_type == 'Patient' %}    
+		    <li class="nav"><a href={{url_for('view_booking',user_id=user_id)}}>View Bookings</a></li>
+		{% else %}
+		    <li class="nav"><a href={{url_for('view_booking',user_id=user_id)}}>View Consultations</a></li>
+		{% endif %}
+		    <li class="nav"><a href={{url_for('logout')}}> Log out </a></li>
+		</ul>
+		
+		<p class="welcome_message">
+		    Logged in as: {{user_name}}
+		</p>
+			<br>
+
+		<p align="center" class="head">
+			Health Centres
+		</p>	
+			<br>
+		<p>
+			<form method="POST">
+				Search by: 
+				<input type="text" name="centre_name" placeholder="Name"></input>
+				<input type="text" name="centre_suburb" placeholder="Suburb"></input>
+				&nbsp;
+				<input type="submit" value="Submit"><br><br>
+			</form>
+		</p>
+
+		<p>
+			<ul>
+			    {% if not empty %}
+				    {% for centre in centres%}
+					    <li>
+					    Name: <b><a style="color: #AACCFF;" href={{url_for('centre_profile',centre_name=centre.name,user_id=user_id)}}>{{centre.name}}</a></b> &nbsp; 
+					    Suburb: <b>{{centre.suburb}}</b> &nbsp;
+					    Rating: <b>{{centre.rating}}</b> &nbsp;
+					    </li>
+					    <br>
+				    {% endfor %}
+			    {% endif %}
+				
+				{% if empty %}
+				<br> No results found - please enter correct term
+			    {% endif %}
+			    
+			<ul>
+		</p>	
+	
+	</div>
+</body>
+</html>

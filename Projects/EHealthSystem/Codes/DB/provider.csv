@@ -1,0 +1,9 @@
+email,password,name,phone,provider_no,job,rating,nratings,centres
+toby@gmail.com,cs1531,Toby,94286451,01,Pathologist,0.0,0,"['Sydney Children Hospital', 'UNSW Health Service']"
+gary@gmail.com,xyz914,Gary,94694117,02,GP,4.0,2,"['Sydney Children Hospital', 'USYD Health Service']"
+samuel@gmail.com,password,Samuel,90860825,03,Pathologist,0.0,0,['Prince of Wales Hospital']
+sid@gmail.com,comp@1531,Sid,92574113,04,Physio,0.0,0,['Royal Prince Alfred Hospital']
+michael@gmail.com,7G445p*n@P,Michael,96220714,05,GP,0.0,0,['USYD Health Service']
+anna@gmail.com,This is a very long password,Anna,96220715,06,GP,5.0,1,"['UTS Health Service', 'Prince of Wales Hospital', 'Sydney Children Hospital']"
+thomas@gmail.com,k_q3nG,Thomas,91432561,07,Pharmacist,0.0,0,['Prince of Wales Hospital']
+ian@gmail.com,x`8&-)6(K,Ian,94156326,08,Physio,0.0,0,['Sydney Children Hospital']

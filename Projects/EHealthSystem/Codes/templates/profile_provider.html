@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+    <head>
+		<title>Profile: {{provider.name}}</title>
+		<link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/centre_profile.css')}}">
+    </head>
+    <body>
+		<div class="wrapper">
+
+			<h1><p class = "heading" align="center">MediSoft HealthCare</p></h1>
+
+			<ul class="nav">
+				<li class="nav"><a href={{url_for('homepage',user_id=user_id)}}>Home</a></li>
+				<li class="nav"><a href={{url_for('health_centre',user_id=user_id)}}>Health Centres</a></li>
+				<li class="nav"><a href={{url_for('health_provider',user_id=user_id)}}>Health Providers</a></li>
+			{% if user_type == 'Patient' %}    
+		        <li class="nav"><a href={{url_for('view_booking',user_id=user_id)}}>View Bookings</a></li>
+	        {% else %}
+	            <li class="nav"><a href={{url_for('view_booking',user_id=user_id)}}>View Consultations</a></li>
+	        {% endif %}
+				<li class="nav"><a href={{url_for('logout')}}> Log out </a></li>
+			</ul>
+
+			<h3> {{provider.name}}'s Profile</h3>
+			<br>
+			- Name: {{provider.name}}
+			<br><br>
+			- Profession: {{provider.job}}
+			<br><br>
+			- Email: {{provider.email}}
+			<br><br>
+			- Contact: {{provider.phone}}
+			<br><br>
+			- Work places: 
+			<br>
+			<ul>
+			{% for centre in provider.centres %}
+				<li>
+					<a style="color: #AACCFF;" href={{url_for('centre_profile',provider_id=provider.id,centre_name=centre.name,user_id=user.id)}}>{{centre.name}}</a>
+					<br><br>
+				</li>
+			{% endfor %}
+			</ul>
+			- Average rating: {{provider.rating}} (out of {{provider.nratings}} ratings)<br><br>
+			
+			{% if user_type == "Patient" %}
+				{% if error == 1 %}
+					<p style="color: red";>Invalid Rating Input</p>
+				{% endif %}
+			    <form method="POST">
+			    Add Rating: &nbsp;<input type="text" onfocus="this.value=''"value="Out of 5" name="rating"></text> &nbsp;&nbsp; <input type="submit" name="Submit">
+			    </form>
+			<br>
+			<br>
+			    <a style="color: #AACCFF;" href = {{url_for('select_centre',provider_id=provider.id,user_id=user.id)}}> Proceed To Booking... </a>
+		    {% endif %}
+		    
+		</div>
+</body>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Select Centre</title>
+        <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/provider.css')}}">
+
+    </head>
+    <body>
+        <div class = "wrapper">
+                    <h1><p class = "heading" align="center">MediSoft HealthCare</p></h1>
+
+            <ul class="nav">
+                <li class="nav"><a href={{url_for('homepage',user_id=user_id)}}>Home</a></li>
+                <li class="nav"><a href={{url_for('health_centre',user_id=user_id)}}>Health Centres</a></li>
+                <li class="nav"><a href={{url_for('health_provider',user_id=user_id)}}>Health Providers</a></li>
+            {% if user_type == 'Patient' %}    
+                <li class="nav"><a href={{url_for('view_booking',user_id=user_id)}}>View Bookings</a></li>
+            {% else %}
+                <li class="nav"><a href={{url_for('view_booking',user_id=user_id)}}>View Consultations</a></li>
+            {% endif %}
+                <li class="nav"><a href={{url_for('logout')}}> Log out </a></li>
+            </ul>
+
+            <form method="POST"><br>
+                <b><p>List of Centres for {{provider.name}}</p></b>
+                <br>
+                    {% for centre in provider.centres %}
+                                <input type="radio" name="centre" value="{{centre.name}}" required> <a style="color: #AACCFF"; href={{url_for('centre_profile',provider_id=provider.id,centre_name=centre.name,user_id=user.id)}}>{{centre.name}}</a>&nbsp;&nbsp;&nbsp;
+                                Contact: {{centre.phone}}&nbsp;&nbsp;&nbsp;
+                            <br><br>
+                    {% endfor %}<br>
+                <button type="submit" value="provider"> Next </button>
+            </form>
+        </div>
+    </body>
+</html>

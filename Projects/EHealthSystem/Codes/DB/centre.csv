@@ -1,0 +1,7 @@
+name,suburb,phone,rating,nratings,providers
+Sydney Children Hospital,Randwick,93821111,0.0,0,"['Gary', 'Ian', 'Anna']"
+UNSW Health Service,Kensington,93855425,0.0,0,['Toby']
+Prince of Wales Hospital,Randwick,93821118,4.0,1,"['Samuel', 'Anna', 'Thomas']"
+Royal Prince Alfred Hospital,Sydney,95156111,3.0,1,['Sid']
+USYD Health Service,Darlington,93513484,0.0,0,"['Gary', 'Michael']"
+UTS Health Service,Ultimo,95141177,0.0,0,['Anna']

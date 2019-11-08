@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>View Consultations</title>
+	<link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/booking.css')}}">
+</head>
+
+<body>
+
+	<div class="wrapper">
+		<h1><p class = "heading" align="center">MediSoft HealthCare</p></h1>
+		
+		<ul class="nav">
+			<li class="nav"><a href={{url_for('homepage',user_id=user_id)}}>Home</a></li>
+			<li class="nav"><a href={{url_for('health_centre',user_id=user_id)}}>Health Centres</a></li>
+			<li class="nav"><a href={{url_for('health_provider',user_id=user_id)}}>Health Providers</a></li>
+			<li class="nav"><a href={{url_for('logout')}}> Log out </a></li>
+		</ul>
+
+		<p class="welcome_message">
+		    Provider: {{user_name}}
+		    <br><br>
+			View current Consultations
+		</p>
+
+		<p>
+			<ul>
+				{% for consultation in consultations %}
+					<li><b>Day: {{consultation._day}} &nbsp;&nbsp; Date: {{consultation._date}} &nbsp;&nbsp; Time: {{consultation._time}} &nbsp;&nbsp; Patient: {{consultation._patient.name}} &nbsp;&nbsp;
+					Centre: {{consultation._centre.name}} &nbsp;<br><br>
+					Reason: {% if consultation.reason == "" %} Not Specified {% else %} {{consultation.reason}} {% endif %}
+					&nbsp; <br><br> <a style="color: #AACCFF;" href={{url_for('view_patient_history', date=consultation._date, time=consultation._time, user_id=user_id)}}>View {{consultation._patient.name}}'s History</a></b> &nbsp;&nbsp;&nbsp;&nbsp; <a style="color: #AACCFF;" href={{url_for('edit_notes', user_id=user_id, date=consultation.date, time=consultation.time, consultations=consultations, admin=True)}}>View/Edit Notes</a>
+					</li>
+					<br><br>
+				{% endfor %}
+			</ul>
+		</p>
+	</div>
+</body>
+</html>

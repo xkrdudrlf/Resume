@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+    <head>
+		<title>Profile: {{centre.name}}</title>
+		<link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/centre_profile.css')}}">
+    </head>
+    <body>
+		<div class="wrapper">
+
+			<h1><p class = "heading" align="center">MediSoft HealthCare</p></h1>
+			
+			<ul class="nav">
+			    <li class="nav"><a href={{url_for('homepage',user_id=user_id)}}>Home</a></li>
+			    <li class="nav"><a href={{url_for('health_centre',user_id=user_id)}}>Health Centres</a></li>
+			    <li class="nav"><a href={{url_for('health_provider',user_id=user_id)}}>Health Providers</a></li>
+			{% if user_type == 'Patient' %}    
+			    <li class="nav"><a href={{url_for('view_booking',user_id=user_id)}}>View Bookings</a></li>
+		    {% else %}
+		        <li class="nav"><a href={{url_for('view_booking',user_id=user_id)}}>View Consultations</a></li>
+		    {% endif %}
+			    <li class="nav"><a href={{url_for('logout')}}> Log out </a></li>
+		    </ul>
+		    
+			<h3> {{centre.name}}'s Profile</h3>
+			<br>
+			- Name: {{centre.name}}<br><br>
+			- Suburb: {{centre.suburb}}<br><br>
+			- Contact: {{centre.phone}}<br><br>
+			- Available services: <br> <br><br>
+			* General Practitioners:<br>
+			{% for provider in centre.providers %}
+				{% if provider.job == 'GP'%}
+					<ul>
+						<li>
+							Name: <a style="color: #AACCFF;" href={{url_for('provider_profile',centre_name=centre.name,provider_id=provider.id,user_id=user.id)}}> {{provider.name}} </a> &nbsp;
+						</li>
+					</ul>
+				{% endif %}
+			{% endfor %}
+			<br>
+			* Pathologists:<br>
+			{% for provider in centre.providers %}
+				{% if provider.job == 'Pathologist'%}
+					<ul>
+						<li>
+							Name: <a style="color: #AACCFF;" href={{url_for('provider_profile',centre_name=centre.name,provider_id=provider.id,user_id=user.id)}}> {{provider.name}} </a>
+						</li>
+					</ul>
+				{% endif %}
+			{% endfor %}
+			<br>
+			* Pharmacists:<br>
+			{% for provider in centre.providers %}
+				{% if provider.job == 'Pharmacist' %}
+					<ul>
+						<li>
+							Name: <a style="color: #AACCFF;" href={{url_for('provider_profile',centre_name=centre.name,provider_id=provider.id,user_id=user.id)}}> {{provider.name}} </a>
+						</li>
+					</ul>	
+				{% endif %}
+			{% endfor %}
+			<br>
+			* Physiotherapists:<br>
+			{% for provider in centre.providers %}
+				{% if provider.job == 'Physio' %}
+					<ul>
+						<li>
+							Name : <a style="color: #AACCFF;" href={{url_for('provider_profile',centre_name=centre.name,provider_id=provider.id,user_id=user.id)}}> {{provider.name}} </a>
+							<br>
+						</li>
+					</ul>
+				{% endif %}
+			{% endfor %}
+			<br> 
+			
+			- Average rating of {{centre.name}}: {{centre.rating}} (out of {{centre.nratings}} ratings)
+			<br>
+			<br>
+			 <form method="POST">
+			 	{% if error == 1 %}
+					<p style="color: red";>Invalid Rating Input</p>
+				{% endif %}
+
+			    Add Rating: &nbsp;<input type="text" onfocus="this.value=''"value="Out of 5" name="rating"></text> &nbsp;&nbsp; <input type="submit" name="Submit">
+			    </form>
+			<br>
+			<br>
+			{% if user_type == "Patient" %}
+			    <a style="color: #AACCFF;" href = {{url_for('select_provider',centre_name=centre.name,user_id=user.id)}}> Proceed To Booking... </a>
+		    {% endif %}
+		</div>
+    </body>
+</html>
+
+

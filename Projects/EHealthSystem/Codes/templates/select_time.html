@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+    <head>
+	    <title>Select Time</title>
+        <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/provider.css')}}">
+    </head>
+    <body>
+        <div class = "wrapper">
+
+            <h1><p class = "heading" align="center">MediSoft HealthCare</p></h1>
+
+            <ul class="nav">
+                <li class="nav"><a href={{url_for('homepage',user_id=user_id)}}>Home</a></li>
+                <li class="nav"><a href={{url_for('health_centre',user_id=user_id)}}>Health Centres</a></li>
+                <li class="nav"><a href={{url_for('health_provider',user_id=user_id)}}>Health Providers</a></li>
+            {% if user_type == 'Patient' %}    
+                <li class="nav"><a href={{url_for('view_booking',user_id=user_id)}}>View Bookings</a></li>
+            {% else %}
+                <li class="nav"><a href={{url_for('view_booking',user_id=user_id)}}>View Consultations</a></li>
+            {% endif %}
+                <li class="nav"><a href={{url_for('logout')}}> Log out </a></li>
+            </ul>
+
+            <h3> Make Appointment </h3>
+            <form method="POST">
+                <label for="time"> Times: </label>&nbsp;&nbsp;&nbsp;&nbsp;
+                
+                <select name="time">
+                <option disabled selected> -- select a time -- </option>
+                
+                {% for time in times %}
+                    <option> {{time}} </option>
+                {% endfor %}
+                
+                </select>
+                
+                <br><br>
+                    Optional: &nbsp;&nbsp;<textarea placeholder="Add Reason" name="reason" style="height: 40px;" maxlength="57"></textarea>>
+                <br>
+                <button type="submit"> Book </button>
+            </form>
+        </div>
+    </body>
+</html>

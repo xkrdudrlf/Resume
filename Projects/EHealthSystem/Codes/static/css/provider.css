@@ -1,0 +1,40 @@
+body {
+	color: white;
+	background-color: #222233;
+	font-size: 20px;
+}
+
+.heading {
+	font-size: 50px;
+	color: #AACCFF;
+}
+
+ul.nav {
+	list-style-type: none;
+	padding: 0;
+	overflow: hidden;
+	background-color: #333;
+}
+
+li.nav {
+	padding-left: 4.5%;
+	display: inline-block;
+	margin-left: 4%;
+	font-size: 19px;
+}
+li a{
+	color: white;
+}
+
+.welcome_message {
+	font-size: 18px;
+}
+
+.wrapper {
+	margin-left: 2%;
+	margin-right: 2%;
+}
+.head {
+	font-size: 35px;
+	font-weight: bold;
+}

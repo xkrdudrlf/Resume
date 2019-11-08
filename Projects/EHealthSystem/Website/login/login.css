@@ -1,0 +1,26 @@
+table {
+	text-align: center;
+	width: 40%;
+}
+.heading {
+	font-size: 40px;
+	color: white; 
+}
+.Input {
+	width: 220px;
+	height: 25px;
+	background-color: white;
+	color: grey;
+	border-radius: 6px;
+}
+.button {
+	background-color: #03C03C;
+	width: 120px;
+	height: 25px;
+	border-radius: 5px;
+}
+
+.top {
+	color: #AACCFF;
+	font-size: 50px;
+}

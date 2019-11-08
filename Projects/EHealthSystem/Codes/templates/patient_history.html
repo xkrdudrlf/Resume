@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>Patient History</title>
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/homepage.css') }}">
+	
+</head>
+
+<body>
+
+	<div class="wrapper">
+		<h1><p class = "heading" align="center">MediSoft HealthCare</p></h1>
+		
+		<ul>
+			<li><a href={{url_for('homepage',user_id=provider_id)}}>Home</a></li>
+			<li><a href={{url_for('health_centre',user_id=provider_id)}}>Health Centres</a></li>
+			<li><a href={{url_for('health_provider',user_id=provider_id)}}>Health Providers</a></li>
+			<li><a href={{url_for('view_booking',user_id=provider_id)}}>View Consultations</a></li>
+			<li><a href={{url_for('logout')}}> Log out </a></li>
+		</ul>
+
+		<p class="welcome_message">
+			<br><b>{{patient.name}}'s History</b>
+		</p>
+			<ul class="content"><br>
+			{% for booking in bookings %}
+				<li class="content"><b>
+					Day: {{booking.day}} &nbsp; 
+					Date: {{booking.date}} &nbsp; 
+					Time: {{booking.time}} &nbsp; 
+					Provider: <a style="color: #AACCFF;" href={{url_for('provider_profile',centre_name=booking.centre.name,provider_id=booking.provider.id,user_id=patient.id)}}>{{booking.provider.name}}</a> &nbsp; 
+					Centre: <a style="color: #AACCFF;" href={{url_for('centre_profile',provider_id=booking.provider.id,centre_name=booking.centre.name,user_id=patient.id)}}>{{booking.centre.name}}</a> &nbsp; &nbsp;
+					{% if provider == booking.provider %}
+						<a href={{url_for('edit_notes',user_id=provider_id, date=booking.date, time=booking.time, admin=True)}}>View/Edit Notes</a>
+					{% else %}
+						<a href={{url_for('edit_notes',user_id=provider_id, date=booking.date, time=booking.time, admin=False)}}>View Notes</a>
+					{% endif %}
+				</b><br>
+				</li>
+					<br><br>
+			</ul>
+		</p>
+		{% endfor %}
+
+	</div>
+</body>
+</html>

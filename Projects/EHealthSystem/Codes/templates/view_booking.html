@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>View Bookings</title>
+	<link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/booking.css')}}">
+</head>
+
+<body>
+
+	<div class="wrapper">
+		<h1><p class = "heading" align="center">MediSoft HealthCare</p></h1>
+		
+		<ul class="nav">
+			<li class="nav"><a href={{url_for('homepage',user_id=user_id)}}>Home</a></li>
+			<li class="nav"><a href={{url_for('health_centre',user_id=user_id)}}>Health Centres</a></li>
+			<li class="nav"><a href={{url_for('health_provider',user_id=user_id)}}>Health Providers</a></li>
+			<li class="nav"><a href={{url_for('view_booking',user_id=user_id)}}>View Bookings</a></li>
+			<li class="nav"><a href={{url_for('logout')}}> Log out </a></li>
+		</ul>
+
+		<p class="welcome_message">
+		    Client name: {{user.name}}
+		    <br><br>
+			Current Bookings:
+		</p>
+		<br>
+		<p>
+			<ul>
+				{% for booking in bookings %}
+					<li><b>Day: {{booking.day}} &nbsp; 
+					Date: {{booking.date}} &nbsp; 
+					Time: {{booking.time}} &nbsp; 
+					Provider: <a style="color: #AACCFF;" href={{url_for('provider_profile',centre_name=booking.centre.name,provider_id=booking.provider.id,user_id=user.id)}}>{{booking.provider.name}}</a> &nbsp; 
+					Centre: <a style="color: #AACCFF;" href={{url_for('centre_profile',provider_id=booking.provider.id,centre_name=booking.centre.name,user_id=user.id)}}>{{booking.centre.name}}</a></b><br></li>
+					<br><br>
+				{% endfor %}
+			</ul>
+		</p>
+	</div>
+</body>
+</html>
