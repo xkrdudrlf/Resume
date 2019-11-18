@@ -4,7 +4,7 @@ package unsw.dungeon;
  * Once it's picked up, it will be consumed automatically and set
  * a player in the invincible mode.
  */
-public class InvincibilityPortion extends Entity implements Obtainable {
+public class InvincibilityPortion extends Entity {
 	public InvincibilityPortion(int x, int y) {
         super(x, y);
     }
@@ -12,11 +12,13 @@ public class InvincibilityPortion extends Entity implements Obtainable {
 	 * A portion is picked up by a player.
 	 * As soon as it's picked up, it will be consumed automatically and 
 	 * set a player in an invincible mode. Also, once it's picked up,
-	 * the portion will be removed from a dungeon.
+	 * the portion will be removed from a dungeon and the image of
+	 * a portion will disappear.
 	 */
 	@Override
 	public void pickedUpByPlayer(Dungeon dungeon,Player player) {
 		player.setInvincibleStatus(true);
+		this.visible().set(false);
 		dungeon.getEntities().remove(this);
 	}
 }

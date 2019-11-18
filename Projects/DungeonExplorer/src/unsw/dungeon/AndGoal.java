@@ -2,7 +2,7 @@ package unsw.dungeon;
 
 public class AndGoal extends CompositeGoal {
 	/**
-	 * Instantiate a Andgoal class from a dungeon
+	 * Instantiate an Andgoal class from a dungeon
 	 * @param dungeon A dungeon for playing
 	 */
 	public AndGoal(Dungeon dungeon) {
@@ -16,11 +16,19 @@ public class AndGoal extends CompositeGoal {
      */
     @Override
     public boolean isEnd() {
+    	boolean flag = true;
         for (Goal subGoal : subGoals) {
             if (!subGoal.isEnd()) {
-                return false;
+                flag = false;
             }
         }
-        return true;
+        return flag;
+    }
+    /**
+     * return a string "AND"
+     */
+    @Override
+    public String toString() {
+    	return "And";
     }
 }

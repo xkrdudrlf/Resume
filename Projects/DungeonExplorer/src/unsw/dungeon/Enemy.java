@@ -5,14 +5,14 @@ package unsw.dungeon;
  * Generally enemy chases after a player to kill the player.
  * Once the life score gets 0 with getting attacked by a player, the enemy is considered to be dead. 
  */
-public class Enemy extends Entity {
+public class Enemy extends Entity implements Observer {
 	Mode chaseMode;
 	Mode runawayMode;
 	
 	private Mode mode;
 	private int lifeScore = 1;
 	private Dungeon dungeon;
-	
+
 	public Enemy(int x,int y) {
 		super(x,y);
 	}
@@ -62,9 +62,32 @@ public class Enemy extends Entity {
 	public void attacked() {
 		lifeScore--;
 		if (lifeScore == 0) {
-			System.out.println("Enemy Dead\n");
+			this.visible().set(false);
 			dungeon.enemyDied(this);
 		}
+	}
+	/**
+	 * As an observer of a player class, this class gets updated by
+	 * changing the mode.
+	 * When a player class' invincibleTimve value is greater than 0,
+	 * it changes its mode to runawayMode using setMode(true).
+	 * Otherwise, it changes its mode to chaseMode using setMode(false).
+	 */
+	@Override
+	public void update(Subject obj) {
+		if (obj instanceof Player) {
+			if (((Player) obj).getInvincibleTime() > 0) {
+				this.setMode(true);
+			} else {
+				this.setMode(false);
+			}
+		}
+	}
+	public Mode getRunawayMode() {
+		return this.runawayMode;
+	}
+	public Mode getChaseMode() {
+		return this.chaseMode;
 	}
 }
 	

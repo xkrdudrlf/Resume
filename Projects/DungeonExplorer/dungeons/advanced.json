@@ -108,6 +108,11 @@
       "type": "sword"
     },
     {
+      "x": 7,
+      "y": 1,
+      "type": "sword"
+    },
+    {
       "x": 17,
       "y": 1,
       "type": "wall"
@@ -215,6 +220,36 @@
     {
       "x": 3,
       "y": 5,
+      "type": "enemy"
+    },
+    {
+      "x": 10,
+      "y": 5,
+      "type": "enemyB"
+    },
+{
+      "x": 11,
+      "y": 5,
+      "type": "enemy"
+    },
+{
+      "x": 12,
+      "y": 5,
+      "type": "enemyB"
+    },
+{
+      "x": 13,
+      "y": 5,
+      "type": "enemyC"
+    },
+{
+      "x": 14,
+      "y": 5,
+      "type": "enemy"
+    },
+    {
+      "x": 15,
+      "y": 10,
       "type": "enemy"
     },
     {
@@ -385,6 +420,26 @@
     {
       "x": 11,
       "y": 10,
+      "type": "invincibility"
+    },
+    {
+      "x": 1,
+      "y": 1,
+      "type": "invincibility"
+    },
+{
+      "x": 1,
+      "y": 2,
+      "type": "invincibility"
+    },
+{
+      "x": 1,
+      "y": 3,
+      "type": "invincibility"
+    },
+{
+      "x": 1,
+      "y": 4,
       "type": "invincibility"
     },
     {
@@ -605,7 +660,15 @@
         "goal": "enemies"
       },
       {
-        "goal": "treasure"
+	"goal": "OR",
+        "subgoals": [        
+	 {
+           "goal": "treasure"
+         },
+         {
+           "goal": "treasure"
+         }
+         ]
       }
     ]
   }

@@ -1038,7 +1038,17 @@
       "type": "door"
     }
   ],
-  "goal-condition": {
-    "goal": "exit"
-  }
+ "goal-condition": {
+    "goal": "AND",
+    "subgoals": [
+      {
+        "goal": "boulders"
+      },
+      {
+        "goal": "enemies"
+      },
+      {
+        "goal": "treasure"
+      }
+      ]
 }

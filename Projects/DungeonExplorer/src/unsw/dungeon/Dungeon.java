@@ -6,9 +6,15 @@ package unsw.dungeon;
 import java.util.ArrayList;
 import java.util.List;
 
+import javafx.animation.Timeline;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+
 /**
  * A dungeon class can contain a single player, entities except a player and goal.
- * Each entity occupies a square and More than one entity can occupy the same square.
+ * Each entity occupies a square and more than one entity can occupy the same square.
  * Overall, This class can be used to 
  * 1. Get/Set the entities in a dungeon,
  * 2. Check positions of entities in a dungeon
@@ -19,7 +25,7 @@ import java.util.List;
 public class Dungeon {
 	/**
 	 * Has a size of dungeon(width,height),entities inside a dungeon, player,
-	 * the number of keys/doors/portals inside a dungeon and goal.
+	 * the number of keys/doors/portals inside a dungeon,goal,timeline and treasureScore.
 	 */
     private int width, height;
     private List<Entity> entities;
@@ -28,15 +34,18 @@ public class Dungeon {
     private int n_doors = 0;
     private int n_portals = 0;
     private Goal goal = null;
-
+    private Timeline timeline;
+    private IntegerProperty treasureScore;
+    
     /**
      * Gets created with a size of a dungeon(width,height)
      */
     public Dungeon(int width, int height) {
-        this.width = width;
+    	this.width = width;
         this.height = height;
         this.entities = new ArrayList<>();
         this.player = null;
+        this.treasureScore = new SimpleIntegerProperty(0);
     }
     /**
      * @return width of a dungeon.
@@ -65,10 +74,28 @@ public class Dungeon {
         this.player = player;
         for (Entity e : entities) {
         	if (e instanceof Enemy) {
-        		player.addEnemy((Enemy)e);
+        		player.attach((Enemy)e);
         		((Enemy)e).setEnvironment(this,player);
         	}
         }
+    }
+    /**
+     * @return a treasureScore attribute(IntegerProperty) of a Dungeon class
+     */
+    public IntegerProperty treasureScore() {
+    	return this.treasureScore;
+    }
+    /**
+     * @return a treasureScore of dungeon as an integer value.
+     */
+    public int getTreasureScore() {
+    	return this.treasureScore.get();
+    }
+    /**
+     * add 1 score to the current treasureScore
+     */
+    public void addTreasureScore() {
+    	this.treasureScore.set(this.getTreasureScore() + 1);
     }
     /**
      * Examine if a player can move to position (x,y) or not.
@@ -79,11 +106,8 @@ public class Dungeon {
     public boolean checkMoveable(Player player,int x,int y) {
     	List<Entity> entities = getEntity(x,y);
     	for (Entity e : entities) {
-    		if (e instanceof Barrier) {
-    			if (((Barrier)e).blockPlayer(this,player)) {
-    				return false;
-    			}
-    		}
+			if (e.blockPlayer(this,player))
+				return false;
     	}
     	return true;
     }
@@ -96,11 +120,8 @@ public class Dungeon {
     public boolean checkMoveable(Enemy enemy,int x,int y) {
     	List<Entity> entities = getEntity(x,y);
     	for (Entity e : entities) {
-    		if (e instanceof Barrier) {
-    			if (((Barrier)e).blockEnemy()) {
-    				return false;
-    			}
-    		}
+    		if (e.blockEnemy())
+    			return false;
     	}
     	return true;
     }
@@ -137,7 +158,7 @@ public class Dungeon {
      */
     public void addEntity(Enemy enemy) {
     	if (getPlayer() != null) {
-    		getPlayer().addEnemy(enemy);
+    		getPlayer().attach(enemy);
     		enemy.setEnvironment(this,player);
     	}
     	entities.add(enemy);
@@ -171,20 +192,17 @@ public class Dungeon {
         return result;
     }
     /**
-     * Remove a dead enemy(life score = 0) from a dungeon.
-     * @param dead enemy
-     */
-    public void enemyDied(Enemy corpse) {
-        entities.remove(corpse);
-    }
-    /**
-	 * Print Game Over message when player died.
-	 * (will be modified and do something more once the front-end part get implemented.
-	 * like getting rid of an image of player/trigger the game over pop up message etc.)
+	 * shows a Game Over pop-up message when player dies.
      * @param dead player
      */
     public void playerDied(Player corpse) {
-    	System.out.println("Game over\n");
+    	this.removeEntity(corpse);
+    	corpse.visible().set(false);
+    	Alert alert = new Alert(AlertType.WARNING);
+    	alert.setTitle("Game over");
+    	alert.setHeaderText("Player is dead, mission failure.");
+    	alert.show();
+    	timeline.stop();
     }
     /**
      * Set a goal of a dungeon.
@@ -217,17 +235,22 @@ public class Dungeon {
     }
     
     /**
-     * check if the goals of game are completed or not
+     * check if the goals of game are completed or not.
+     * if all given goals are completed, it will show a player congrats pop-up message and
+     * stop the timeline.
      * @return  if the goals are completed ,return true. if not ,return false
      */
     public boolean gameCheck() {
         if (this.getGoal().isEnd()) {
-        	System.out.println("You complete the dungeon !!\n");
+        	Alert alert = new Alert(AlertType.INFORMATION);
+        	alert.setTitle("Congratulation");
+        	alert.setHeaderText("You complete the dungeon");
+        	timeline.stop();
+        	alert.show();
         	return true;
         }
         return false;
     }
-    
     /**
      * check if the square where the player stay has a portal or not
      * @param player  The player who plays the game
@@ -255,49 +278,57 @@ public class Dungeon {
     	return enemies;
     }
     /**
-     * With a given direction, dungeon clock moves in 2 steps : tik() and tok().
-     * If a player is already dead, nothing will happen.
-     * @param direction a direction in which a player will move this time.
+     * set a timeline to the dungeon.
+     * @param timeline
      */
-    public void clock(String direction) {
-    	if (player.getAlive() == false) return;
-    	tik(direction);
-    	tok();
+    public void setTimeline(Timeline timeline) {
+    	this.timeline = timeline;
     }
     /**
-     * First step of 2 steps in 1 time frame of the dungeon.
-     * In this time frame, a player moves in the given direction with invincibleTimeUpdate
-     * and enemies also move after a player.
-     * @param direction
+     * remove the given entity from a dungeon.
+     * @param e
      */
-    public void tik(String direction) {
-    	player.move(direction);
+    public void removeEntity(Entity e) {
+    	this.entities.remove(e);
+    }
+    /**
+     * remove the dead enemy from a dungeon and player's observer list.
+     * @param enemy
+     */
+    public void enemyDied(Enemy enemy) {
+    	this.removeEntity(enemy);
+    	this.getPlayer().detach(enemy);
+    }
+    /**
+     * Dungeon's basic time unit.
+     * when this method got invoked,
+     * 1. player invincible time get updated
+     * 2. enemies move
+     * 3. checks any collisions between enemies and a player
+     * 4. check if the goals have been achieved or not
+     */
+    public void tick() {
     	player.invincibileTimeUpdate();
-    	enemyMove();
-    }
-    /**
-     * Second step of 2 steps in 1 time frame of the dungeon.
-     * In this time frame, a player check Enemy/Portal in the current square.
-     * If there are any enemies in the same square, a player will kill them or die.
-     * If there is a portal in the same square, after dealing with enemies,if any, a player can use the portal.
-     * Also, player can pick up the item if there is any in the current square.
-     * As a last step, dungeon check if the goal has been achieved or not.
-     */
-    public void tok() {
-    	if (!player.attackOrDie(enemyCheck(player))) 
+    	this.enemyMove();
+    	if (!player.attackOrDie(enemyCheck(player))) { 
     		return;
-    	portalCheck(player);
-    	player.pickupItem();
-    	gameCheck();
+    	}
+    	if (gameCheck()) {
+    		player.setFinished(true);
+    	}
     }
     /**
      * All the enemies inside the dungeon moves.
-     */
+    */ 
     public void enemyMove() {
-    	for (Entity entity : entities) {
+    	List<Enemy> enemies = new ArrayList<Enemy>();
+    	for (Entity entity : this.getEntities()) {
     		if (entity instanceof Enemy) {
-    			((Enemy) entity).move();
+    			enemies.add((Enemy)entity);
     		}
+    	}
+    	for (Enemy enemy : enemies) {
+    		enemy.move();
     	}
     }
 }

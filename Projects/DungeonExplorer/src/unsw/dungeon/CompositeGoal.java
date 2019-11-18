@@ -31,4 +31,22 @@ public class CompositeGoal extends Goal {
     public void addSubGoal(Goal goal) {
         subGoals.add(goal);
     }
+    /**
+     * attach a given observer to the subGoals.
+     */
+    @Override
+    public void attach(Observer obj) {
+    	for (Goal subGoal : subGoals) {
+    		subGoal.attach(obj);
+    	}
+    }
+    /**
+     * detach a given observer from the subGoals.
+     */
+    @Override
+    public void detach(Observer obj) {
+    	for (Goal subGoal : subGoals) {
+    		subGoal.detach(obj);
+    	}
+    }
 }

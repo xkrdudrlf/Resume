@@ -1,15 +1,20 @@
 package unsw.dungeon;
+
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+
 /**
  * Door can be open or closed.
  * If it's closed it will block enemy/player's movement.
- * When it's closed, it can only be opend by a key whos id is same with the door.
+ * When it's closed, it can only be opened by a key whose id is same with the door.
  */
-public class Door extends Entity implements Barrier{
+public class Door extends Entity {
 	private int id = -1;
-	private boolean status = false; // true: open, false: closed.
+	private BooleanProperty status; // true: open, false: closed.
 	
 	public Door(int x,int y) {
 		super(x,y);
+		this.status = new SimpleBooleanProperty(false);
 	}
 	/**
 	 * @return id of a door.
@@ -28,7 +33,7 @@ public class Door extends Entity implements Barrier{
 	 * @return if a door is closed return false. Otherwise, return true.
 	 */
 	public boolean getStatus() {
-		return this.status;
+		return this.status.get();
 	}
 	/**
 	 * Set door's closed/open status.
@@ -36,7 +41,7 @@ public class Door extends Entity implements Barrier{
 	 * @param status
 	 */
 	public void setStatus(boolean status) {
-		this.status = status;
+		this.status.set(status);
 	}
 	/**
 	 * If a door is open, return true.
@@ -60,5 +65,11 @@ public class Door extends Entity implements Barrier{
 			return true;
 		}
 		return false;
+	}
+	/**
+	 * @return a status attribute(BooleanProperty) of a Door entity.
+	 */
+	public BooleanProperty status() {
+		return this.status;
 	}
 }

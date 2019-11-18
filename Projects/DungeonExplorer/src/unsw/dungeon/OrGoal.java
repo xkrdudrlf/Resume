@@ -18,11 +18,19 @@ public class OrGoal extends CompositeGoal {
      */
     @Override
     public boolean isEnd() {
+    	boolean flag = false;
         for (Goal subGoal : subGoals) {
             if (subGoal.isEnd()) {
-                return true;
+                flag = true;
             }
         }
-        return false;
+        return flag;
+    }
+    /**
+     * return string "OR"
+     */
+    @Override
+    public String toString() {
+    	return "Or";
     }
 }

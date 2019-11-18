@@ -7,7 +7,7 @@ package unsw.dungeon;
  * @author YUNXIANG ZHANG(z5083830)
  *
  */
-public class Boulder extends Entity implements Barrier {
+public class Boulder extends Entity {
 	/**
 	 * inherit the constructor method in the super class Entity 
 	 * gets the required wall with specified position 
@@ -19,7 +19,7 @@ public class Boulder extends Entity implements Barrier {
     }
 	/**
      * check if there is empty square  behind the boulder or 
-     * an unactived FloorSwitch that makes the boulder
+     * an unactivated FloorSwitch that makes the boulder
      * moveable , if so, move the boulder to another square
      * @param dungeon  A dungeon for playing
      * @param player   A player that plays in the dungeon 
@@ -40,7 +40,6 @@ public class Boulder extends Entity implements Barrier {
         return true;
     }
     /**
-     * override the blockplayer method in the Barrier interface 
      * invoke the ablepush method in the boulder class to check if the boulder
      * can be pushed or not
      * @param dungeon    A dungeon for playing
@@ -55,7 +54,6 @@ public class Boulder extends Entity implements Barrier {
     	return false;
 	}
     /**
-     * override the blockenemy method in the Barrier interface
      * @return  boulder always block the enemy, so it always return true
      */
     @Override

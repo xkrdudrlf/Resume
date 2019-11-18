@@ -8,25 +8,28 @@ import org.json.JSONObject;
 import org.json.JSONTokener;
 
 /**
- * Loads a dungeon from a .json file.
- * <p>
  * By extending this class, a subclass can hook into entity creation. This is
  * useful for creating UI elements with corresponding entities.
- *
- * @author Robert Clifton-Everest
  */
 public abstract class DungeonLoader {
 
     private JSONObject json;
-
-    public DungeonLoader(String filename) throws FileNotFoundException {
-        json = new JSONObject(new JSONTokener(new FileReader("dungeons/" + filename)));
+    
+    /**
+     * get a JSON object from given JSON file and
+     * construct a dungeon from the JSON object.
+     * @param filename
+     * @return a dungeon created from a JSON file.
+     * @throws FileNotFoundException
+     */
+    public Dungeon loadDungeonFromFile(String filename) throws FileNotFoundException {
+    	json = new JSONObject(new JSONTokener(new FileReader("dungeons/" + filename)));
+    	return load();
     }
 
     /**
      * Parses the JSON to create a dungeon.
-     *
-     * @return
+     * @return a dungeon created from JSON file.
      */
     public Dungeon load() {
         int width = json.getInt("width");
@@ -140,6 +143,12 @@ public abstract class DungeonLoader {
             case "enemy":
                 addEnemy(dungeon, x, y);
                 break;
+            case "enemyB":
+                addEnemyB(dungeon, x, y);
+                break;
+            case "enemyC":
+                addEnemyC(dungeon, x, y);
+                break;
             case "exit":
                 addExit(dungeon, x, y);
                 break;
@@ -206,6 +215,18 @@ public abstract class DungeonLoader {
         onLoad(enemy);
         dungeon.addEntity(enemy);
     }
+    
+    public void addEnemyB(Dungeon dungeon, int x, int y) {
+        EnemyB enemy = new EnemyB(x, y);
+        onLoad(enemy);
+        dungeon.addEntity(enemy);
+    }
+    
+    public void addEnemyC(Dungeon dungeon, int x, int y) {
+        EnemyC enemy = new EnemyC(x, y);
+        onLoad(enemy);
+        dungeon.addEntity(enemy);
+    }
 
     public void addBoulder(Dungeon dungeon, int x, int y) {
         Boulder boulder = new Boulder(x, y);
@@ -237,6 +258,8 @@ public abstract class DungeonLoader {
     public abstract void onLoad(Key key);
     public abstract void onLoad(Sword sword);
     public abstract void onLoad(Enemy enemy);
+    public abstract void onLoad(EnemyB enemy);
+    public abstract void onLoad(EnemyC enemy);
     public abstract void onLoad(Boulder boulder);
     public abstract void onLoad(Exit exit);
     public abstract void onLoad(FloorSwitch floorswitch);
